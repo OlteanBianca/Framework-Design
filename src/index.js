@@ -1,17 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+ import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import resolvers from './Schema/Resolvers.js';
+import definitions from './Schema/Definitions.js'
+import { ApolloServer } from 'apollo-server-express';
+import { makeExecutableSchema } from '@graphql-tools/schema'; 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const schema = makeExecutableSchema({ typeDefs: definitions, resolvers });
+
+const server = new ApolloServer({ schema });
+
+async function startServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+  app.listen({ port: 4000 }, () =>
+    console.log(`Server running at http://localhost:4000${server.graphqlPath}`)
+  );
+}
+
+startServer();
