@@ -74,7 +74,3 @@ const definitions = gql`
 `;
 
 export default definitions;
-
-    // getAuthorId(name: String!): Author
-    // getLibraryId(name: String!): Library
-    // getClientId(name: String!): Client
