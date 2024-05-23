@@ -1,4 +1,4 @@
- import express from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import resolvers from './Schema/Resolvers.js';
@@ -11,7 +11,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const schema = makeExecutableSchema({ typeDefs: definitions, resolvers });
-
 const server = new ApolloServer({ schema });
 
 async function startServer() {

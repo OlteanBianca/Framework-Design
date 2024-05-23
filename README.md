@@ -1,70 +1,118 @@
-# Getting Started with Create React App
+# GraphQL Library Management
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+A GraphQL-based library management system that allows users to manage clients, books, authors, libraries, and borrowed books efficiently.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Client Management**: Add, update, and delete client information.
+- **Book Management**: Manage books, including adding new books, updating details, and deleting entries.
+- **Author Management**: Maintain author information and associate authors with books.
+- **Library Management**: Manage libraries, including what books each of them contains.
+- **Borrowed Book Management**: Track borrowed books, including due dates and client information.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **GraphQL**: A query language for your API.
+- **React**: A JavaScript library for building user interfaces.
+- **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine.
+- **Express**: A web application framework for Node.js.
+- **Apollo Server**: A GraphQL server library for Node.js.
+- **React Apollo**: A GraphQL client for React.
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Follow these instructions to get the project up and running on your local machine for development and testing purposes.
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js and npm installed
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository:
 
-### `npm run eject`
+   ```bash
+   git clone https://github.com/OlteanBianca/Framework-Design-Server.git
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Start the development server:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   node src/index.js
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. Access the application in your web browser at `http://localhost:4000/graphql`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Usage
 
-## Learn More
+All the definitions for the schema can be found in `./Schema/Definitions.js`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+GraphQL definition for an entity example:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+type Book {
+    id: ID!
+    title: String!
+    genre: String!
+    author: Author
+    library: Library
+    totalCopies: Int!
+    availableCopies: Int!
+  }
+```
 
-### Code Splitting
+GraphQL definition for the queries example:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+type Query {
+    authors: [Author]
+    author(id: ID!): Author 
+    books: [Book]
+    book(id: ID!): Book
+  }
+```
 
-### Analyzing the Bundle Size
+GraphQL definition for the mutations(operations) example:
+```bash
+type Mutation {
+    addAuthor(name: String!): Author
+    updateAuthor(id: ID!, name: String!): Author
+    updateLibrary(id: ID!, name: String!): Library
+    deleteAuthor(id: ID!): Author
+    deleteBook(id: ID!): Book
+  }
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## How to test the application
 
-### Making a Progressive Web App
+At the address `http://localhost:4000/graphql` the Apollo GraphQl Sandbox is opened. In this studio all queries and mutations can be run.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Query to view all the books:
+```bash
+query Books {
+  books {
+    id
+    title
+    genre
+    author {
+      id
+      name
+      books {
+        id
+        title
+        genre
+        totalCopies
+        availableCopies
+      }
+    }
+    library {
+      id
+      name
+    }
+    totalCopies
+    availableCopies
+  }
+}
+```
